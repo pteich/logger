@@ -2,16 +2,7 @@
 --
     import "github.com/pteich/logger"
 
-
 ## Usage
-
-#### type Config
-
-```go
-type Config struct {
-}
-```
-
 
 #### type Logger
 
@@ -28,7 +19,7 @@ Logger represents a logger that embeds zerolog
 ```go
 func New(opts ...Option) *Logger
 ```
-New returns a new logger with specific options
+New returns a new logger with specific options (zero to x)
 
 #### func  NewFromZerolog
 
@@ -47,7 +38,7 @@ Log implements a common log interface
 #### type Option
 
 ```go
-type Option func(c *Config)
+type Option func(c *config)
 ```
 
 Options is an config setting function
@@ -55,7 +46,7 @@ Options is an config setting function
 #### func  WithLogConsole
 
 ```go
-func WithLogConsole(logConsole bool) Option
+func WithLogConsole() Option
 ```
 WithLogConsole enabled human readable logging to console
 
@@ -65,6 +56,13 @@ WithLogConsole enabled human readable logging to console
 func WithLogLevel(logLevel string) Option
 ```
 WithLogLevel sets a specific loglevel given as string (e.g. debug)
+
+#### func  WithNanoSeconds
+
+```go
+func WithNanoSeconds() Option
+```
+WithNanoSeconds logs timestamp with nanos if millis are not enough
 
 #### func  WithServiceName
 

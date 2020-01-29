@@ -9,10 +9,11 @@ import (
 	"github.com/rs/zerolog"
 )
 
-type Config struct {
+type config struct {
 	logLevel    string
 	logConsole  bool
 	serviceName string
+	nanoSeconds bool
 }
 
 // Logger represents a logger that embeds zerolog
@@ -20,11 +21,11 @@ type Logger struct {
 	zerolog.Logger
 }
 
-// New returns a new logger with specific options
+// New returns a new logger with specific options (zero to x)
 func New(opts ...Option) *Logger {
 
 	_, filename, _, _ := runtime.Caller(0)
-	config := Config{
+	config := config{
 		logLevel:    "debug",
 		logConsole:  true,
 		serviceName: filename,
@@ -43,6 +44,14 @@ func New(opts ...Option) *Logger {
 
 	if config.logConsole {
 		logDest = zerolog.ConsoleWriter{Out: logDest, TimeFormat: time.RFC3339}
+	}
+
+	// this is actually bad b/c we set package global variables in zerolog
+	// but this is the only way (that I found) to do this
+	if config.nanoSeconds {
+		zerolog.DurationFieldInteger = true
+		zerolog.DurationFieldUnit = time.Millisecond
+		zerolog.TimeFieldFormat = time.RFC3339Nano
 	}
 
 	return &Logger{
