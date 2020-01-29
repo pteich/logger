@@ -30,3 +30,17 @@ func WithServiceName(serviceName string) Option {
 		c.serviceName = serviceName
 	}
 }
+
+// WithHostname sets a host name as log field
+func WithHostname(hostName string) Option {
+	return func(c *config) {
+		c.hostName = hostName
+	}
+}
+
+// WithCaller adds a field with the caller (Go file name and line)
+func WithCaller() Option {
+	return func(c *config) {
+		c.caller = true
+	}
+}

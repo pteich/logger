@@ -3,10 +3,14 @@ package logger
 import (
 	"io"
 	"os"
-	"runtime"
 	"time"
 
 	"github.com/rs/zerolog"
+)
+
+const (
+	LogFieldService  = "service"
+	LogFieldHostname = "hostname"
 )
 
 type config struct {
@@ -14,6 +18,8 @@ type config struct {
 	logConsole  bool
 	serviceName string
 	nanoSeconds bool
+	hostName    string
+	caller      bool
 }
 
 // Logger represents a logger that embeds zerolog
@@ -24,11 +30,12 @@ type Logger struct {
 // New returns a new logger with specific options (zero to x)
 func New(opts ...Option) *Logger {
 
-	_, filename, _, _ := runtime.Caller(0)
 	config := config{
 		logLevel:    "debug",
-		logConsole:  true,
-		serviceName: filename,
+		logConsole:  false,
+		serviceName: "",
+		nanoSeconds: false,
+		hostName:    "",
 	}
 
 	for _, opt := range opts {
@@ -54,8 +61,19 @@ func New(opts ...Option) *Logger {
 		zerolog.TimeFieldFormat = time.RFC3339Nano
 	}
 
+	loggerContext := zerolog.New(logDest).With().Timestamp().Str(LogFieldService, config.serviceName)
+	if config.hostName != "" {
+		loggerContext = loggerContext.Str(LogFieldHostname, config.hostName)
+	}
+	if config.serviceName != "" {
+		loggerContext = loggerContext.Str(LogFieldService, config.serviceName)
+	}
+	if config.caller {
+		loggerContext = loggerContext.Caller()
+	}
+
 	return &Logger{
-		Logger: zerolog.New(logDest).With().Timestamp().Str("service", config.serviceName).Logger(),
+		Logger: loggerContext.Logger(),
 	}
 }
 
