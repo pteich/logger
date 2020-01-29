@@ -61,7 +61,7 @@ func New(opts ...Option) *Logger {
 		zerolog.TimeFieldFormat = time.RFC3339Nano
 	}
 
-	loggerContext := zerolog.New(logDest).With().Timestamp().Str(LogFieldService, config.serviceName)
+	loggerContext := zerolog.New(logDest).With().Timestamp()
 	if config.hostName != "" {
 		loggerContext = loggerContext.Str(LogFieldHostname, config.hostName)
 	}
