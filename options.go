@@ -11,9 +11,9 @@ func WithLogLevel(logLevel string) Option {
 }
 
 // WithLogConsole enabled human readable logging to console
-func WithLogConsole() Option {
+func WithLogConsole(logConsole bool) Option {
 	return func(c *config) {
-		c.logConsole = true
+		c.logConsole = logConsole
 	}
 }
 
