@@ -6,14 +6,21 @@ type Option func(c *config)
 // WithLogLevel sets a specific loglevel given as string (e.g. debug)
 func WithLogLevel(logLevel string) Option {
 	return func(c *config) {
-		c.logLevel = logLevel
+		c.level = logLevel
 	}
 }
 
-// WithLogConsole enabled human readable logging to console
+// WithLogConsole enables human readable logging to console
 func WithLogConsole(logConsole bool) Option {
 	return func(c *config) {
-		c.logConsole = logConsole
+		c.consoleOutput = logConsole
+	}
+}
+
+// WithColor enables colored output for console logs
+func WithColor(color bool) Option {
+	return func(c *config) {
+		c.color = color
 	}
 }
 
