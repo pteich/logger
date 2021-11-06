@@ -13,6 +13,8 @@ const (
 	LogFieldHostname = "hostname"
 )
 
+var StdLogger = New()
+
 type config struct {
 	level         string
 	consoleOutput bool
@@ -62,7 +64,7 @@ func New(opts ...Option) *Logger {
 		zerolog.TimeFieldFormat = time.RFC3339Nano
 	}
 
-	loggerContext := zerolog.New(logDest).With().Timestamp()
+	loggerContext := zerolog.New(logDest).Level(zerologLevel).With().Timestamp()
 	if config.hostName != "" {
 		loggerContext = loggerContext.Str(LogFieldHostname, config.hostName)
 	}
