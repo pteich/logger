@@ -19,3 +19,7 @@ func (log *Logger) Errorf(template string, args ...interface{}) {
 func (log *Logger) Fatalf(template string, args ...interface{}) {
 	log.Fatal().Msgf(template, args...)
 }
+
+func (log *Logger) Tracef(template string, args ...interface{}) {
+	log.Trace().Msgf(template, args...)
+}
