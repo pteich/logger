@@ -15,3 +15,7 @@ func (log *Logger) Warnf(template string, args ...interface{}) {
 func (log *Logger) Errorf(template string, args ...interface{}) {
 	log.Error().Msgf(template, args...)
 }
+
+func (log *Logger) Fatalf(template string, args ...interface{}) {
+	log.Fatal().Msgf(template, args...)
+}
